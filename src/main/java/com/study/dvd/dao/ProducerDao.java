@@ -6,14 +6,14 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.study.dvd.entity.Dvd;
+import com.study.dvd.entity.Producer;
 import com.study.dvd.util.DBConnectionMgr;
 
-public class DvdDao {
+public class ProducerDao {
 	private static DBConnectionMgr pool = DBConnectionMgr.getInstance();
 	
-	public static List<Dvd> searchDvdByTitle(String searchText) {
-		List<Dvd> dvds = new ArrayList<>();
+	public static List<Producer> searchDvdByProducerName(String searchText) {
+		List<Producer> producers = new ArrayList<>();
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -21,27 +21,21 @@ public class DvdDao {
 		try {
 			con = pool.getConnection();
 			StringBuilder sql = new StringBuilder();
-			sql.append("select * from dvd_views ");
-			sql.append("where title like ? limit 0, 50");
+			sql.append("select * from dvd_db.producer_tb ");
+			sql.append("where producer_name like ? limit 0, 50");
 			pstmt = con.prepareStatement(sql.toString());
 			pstmt.setString(1, "%" + searchText + "%");
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				Dvd dvd = Dvd.builder()
-						.dvdId(rs.getInt(1))
-						.registrationNumber(rs.getString(2))
-						.title(rs.getString(3))
-						.producerId(rs.getInt(4))
-						.producerName(rs.getString(5))
-						.publisherId(rs.getInt(6))
-						.publisherName(rs.getString(7))
-						.publicationYear(rs.getInt(8))
-						.databaseDate(rs.getDate(9).toLocalDate())
+				Producer producer = Producer.builder()
+						.producerId(rs.getInt(1))
+						.producerName(rs.getString(2))
 						.build();
 
-				dvds.add(dvd);
-			}
+				producers.add(producer);
+				}
+
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -49,8 +43,7 @@ public class DvdDao {
 			pool.freeConnection(con, pstmt, rs);
 		}
 		
-		
-		return dvds;		
+		return producers;
 	}
 
 }
