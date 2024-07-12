@@ -24,7 +24,7 @@
 </head>
 <body>
 	<div>
-		<label>DVD 검색</label>
+		<label>제작사 검색</label>
 		<input type="text" class="search-input" placeholder="제작사명을 입력하세요">
 		<button onclick="handleSearchClick()">검색</button>
 	</div>
